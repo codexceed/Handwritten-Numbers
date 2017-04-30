@@ -21,16 +21,21 @@ def logisticTrainer(theta_init, X, Y, lamb, alpha):
     theta_mod = theta_init
 
 
-    J = (-1/m)*tf.reduce_sum((y*tf.log(h)+(1-y)*tf.log(1-h)), 0) + (lamb/(2*m))*(tf.reduce_sum(theta**2) - sess.run(theta)[0]**2)
+
+    J = (-1/m)*tf.reduce_sum((y*tf.log(h)+(1-y)*tf.log(1-h)), 0) + (lamb/(2*m))*(tf.reduce_sum(theta**2))
 
     optimizer = tf.train.GradientDescentOptimizer(alpha)
 
     train = optimizer.minimize(J)
 
-    for i in range(100):
+
+
+    for i in range(500):
         sess.run(train, {x:X, y:Y})
+        theta_init[0]+=(alpha*lamb/m)*theta_init[0]
+
 
     print(sess.run(J, {x:X, y:Y}))
 
 
-    return sess.run(theta)
+    return sess.run(theta)[0]
